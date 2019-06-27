@@ -1,0 +1,17 @@
+---
+- hosts: gcp
+  remote_user: carto
+  tasks:
+  - name: clone github repo
+    git:
+    repo: git@github.com:alberhander/docker-ansible-tests.git
+    version: master
+    dest: ~/git/docker-ansible-tests
+    accept_hostkey: yes
+  become: no
+  - name: run docker app
+    docker_container:
+	name: friendlyhello
+	image:albertohergonz/getting-started:part2
+	ports: 80:80
+	restart: true
