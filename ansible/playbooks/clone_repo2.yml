@@ -1,0 +1,23 @@
+---
+- hosts: gcp
+  tasks:
+   - name: install docker
+     command: snap install docker
+     become: true
+   - name: download pip
+     command: curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+   - name: install pip     
+     command: python get-pip.py
+   - pip:
+       name: docker-py
+   - name: clone github repo
+     git:
+       repo: https://github.com/alberhander/docker-ansible-tests.git
+       version: master
+       dest: ~/git/docker-ansible-tests
+       accept_hostkey: yes
+   - name: run docker app
+     docker_container:
+       name: hello-world
+       image: hello-world
+       restart: true
